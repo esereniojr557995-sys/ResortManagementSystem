@@ -1,0 +1,198 @@
+@ResortManagementSystem.Api_HostAddress = http://localhost:5226
+
+### ===================== COMPANIES =====================
+### [ALREADY DONE — do not resend, CompanyCode is unique and will fail]
+POST {{ResortManagementSystem.Api_HostAddress}}/companies
+Content-Type: application/json
+
+{
+  "companyCode": "RESORT03",
+  "companyName": "Jelmars Beach Resort"
+}
+
+### [ALREADY DONE — do not resend, would create a duplicate row]
+POST {{ResortManagementSystem.Api_HostAddress}}/company-databases
+Content-Type: application/json
+
+{
+  "companyId": 3,
+  "serverName": "db70423.public.databaseasp.net",
+  "databaseName": "70423",
+  "isActive": true
+}
+
+### ===================== CUSTOMERS =====================
+
+### Create a customer for TenantA (Company 1)
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/1/customers
+Content-Type: application/json
+
+{
+  "fullName": "Juan Dela Cruz",
+  "email": "juan@example.com",
+  "phoneNumber": "09171234567",
+  "address": "Davao City"
+}
+
+### Create a customer for TenantB (Company 2)
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/2/customers
+Content-Type: application/json
+
+{
+  "fullName": "Maria Santos",
+  "email": "maria@example.com",
+  "phoneNumber": "09179876543",
+  "address": "Cebu City"
+}
+
+### Confirm Company 1 sees ONLY its own customer
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/1/customers
+Accept: application/json
+
+### Confirm Company 2 sees ONLY its own customer
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/customers
+Accept: application/json
+
+### Get a single customer by id (replace 1 with a real CustomerId from Company 1's GET above)
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/1/customers/1
+Accept: application/json
+
+### Update a customer for Company 1 (replace 1 with a real CustomerId)
+PUT {{ResortManagementSystem.Api_HostAddress}}/tenant/1/customers/1
+Content-Type: application/json
+
+{
+  "fullName": "Juan Dela Cruz Jr.",
+  "email": "juan.jr@example.com",
+  "phoneNumber": "09171234567",
+  "address": "Davao City, Updated Address"
+}
+
+### Delete a customer for Company 1 (replace 1 with a real CustomerId)
+DELETE {{ResortManagementSystem.Api_HostAddress}}/tenant/1/customers/1
+
+### ===================== PRODUCTS =====================
+
+### Create a product for Company 1
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/1/products
+Content-Type: application/json
+
+{
+  "productCode": "PROD001",
+  "productName": "Demo Product",
+  "unitPrice": 99.50,
+  "isActive": true
+}
+
+### Create a product for Company 2
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/2/products
+Content-Type: application/json
+
+{
+  "productCode": "SVC-TOUR",
+  "productName": "Island Hopping Tour",
+  "unitPrice": 3200.00,
+  "isActive": true
+}
+
+### Confirm Company 1 sees ONLY its own products
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/1/products
+Accept: application/json
+
+### Confirm Company 2 sees ONLY its own products
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/products
+Accept: application/json
+
+### Update a product for Company 1 (replace 1 with a real ProductId)
+PUT {{ResortManagementSystem.Api_HostAddress}}/tenant/2/products/1
+Content-Type: application/json
+
+{
+  "productCode": "RM-STD",
+  "productName": "Standard Room",
+  "unitPrice": 2500.00,
+  "isActive": true
+}
+
+### Delete a product for Company 2 (replace 3 with a real ProductId from Company 2's GET above)
+DELETE {{ResortManagementSystem.Api_HostAddress}}/tenant/1/products/1
+
+### [run this last, to confirm Company 2's product count updated]
+GET {{ResortManagementSystem.Api_HostAddress}}/test-tenant/2
+Accept: application/json
+
+### ===================== RESERVATIONS =====================
+
+### Create a reservation for Company 2 (use real CustomerId/ProductId from Company 2's own GETs above)
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/2/reservations
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "productId": 1,
+  "checkInDate": "2026-10-02",
+  "checkOutDate": "2026-10-05",
+  "status": "Pending",
+  "totalAmount": 5000.00
+}
+
+### Confirm Company 2 sees its reservation
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/reservations
+Accept: application/json
+
+### Get a single reservation by id for Company 2 (replace 1 with a real ReservationId)
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/reservations/1
+Accept: application/json
+
+### Update a reservation status for Company 2 (replace 1 with a real ReservationId)
+PUT {{ResortManagementSystem.Api_HostAddress}}/tenant/2/reservations/1
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "productId": 1,
+  "checkInDate": "2026-10-01",
+  "checkOutDate": "2026-10-05",
+  "status": "Confirmed",
+  "totalAmount": 5000.00
+}
+
+### Delete a reservation for Company 2 (replace 1 with a real ReservationId)
+DELETE {{ResortManagementSystem.Api_HostAddress}}/tenant/2/reservations/1
+
+### ===================== STAFF =====================
+
+### Create staff for Company 2
+POST {{ResortManagementSystem.Api_HostAddress}}/tenant/2/staff
+Content-Type: application/json
+
+{
+  "fullName": "Rena Reyes",
+  "email": "rena.reyes@resort.com",
+  "phoneNumber": "09181234567",
+  "role": "Manager",
+  "isActive": true
+}
+
+### Confirm Company 2 sees its staff
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/staff
+Accept: application/json
+
+### Get a single staff member by id for Company 2 (replace 1 with a real StaffId)
+GET {{ResortManagementSystem.Api_HostAddress}}/tenant/2/staff/1
+Accept: application/json
+
+### Update staff role for Company 2 (replace 1 with a real StaffId)
+PUT {{ResortManagementSystem.Api_HostAddress}}/tenant/2/staff/1
+Content-Type: application/json
+
+{
+  "fullName": "Rena Reyes",
+  "email": "rena.reyes@resort.com",
+  "phoneNumber": "09181234567",
+  "role": "Admin",
+  "isActive": true
+}
+
+### Delete staff for Company 2 (replace 1 with a real StaffId)
+DELETE {{ResortManagementSystem.Api_HostAddress}}/tenant/2/staff/1z

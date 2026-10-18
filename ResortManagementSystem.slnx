@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ResortManagementSystem.Api/ResortManagementSystem.Api.csproj" />
+  <Project Path="ResortManagementSystem.Domain/ResortManagementSystem.Domain.csproj" />
+  <Project Path="ResortManagementSystem.Infrastructure/ResortManagementSystem.Infrastructure.csproj" />
+  <Project Path="ResortManagementSystem.winforms/ResortManagementSystem.Winforms.csproj" Id="1566b98a-3535-4bb5-bb2e-4deb16b707d8" />
+</Solution>
